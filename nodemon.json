@@ -1,0 +1,7 @@
+{
+  "watch": ["index.ts", "DB", "src"],
+  "ext": "ts,json",
+  "exec": "tsx index.ts",
+  "signal": "SIGTERM",
+  "delay": 500
+}
