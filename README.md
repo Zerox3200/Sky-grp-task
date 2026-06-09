@@ -8,7 +8,7 @@
 
 > Project Description
 
-### 📌 Project Description
+### Project Description
 
 The Order & Inventory Management System is a scalable backend service designed to handle product management, order processing, and stock control in a reliable and production-ready architecture.
 
@@ -22,7 +22,8 @@ It also implements JWT-based authentication with access and refresh tokens, idem
 
 The project follows a clean architecture approach, separating concerns into controllers, services, and data layers, ensuring maintainability and scalability.
 
-Key Features
+### Key Features
+
 Product management with stock control and soft delete
 Secure authentication (JWT access & refresh tokens)
 Order creation with full transactional integrity
@@ -34,7 +35,7 @@ Structured logging and error handling
 Swagger API documentation
 Integration and unit testing support
 
-### ✨ [Demo](Integration and unit testing supportyy)
+### [Demo](Integration and unit testing supportyy)
 
 ## Install
 
