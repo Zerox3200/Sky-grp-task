@@ -1,0 +1,62 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: sky-grp-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sky_grp
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  redis:
+    image: redis:7-alpine
+    container_name: sky-grp-redis
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sky-grp-api
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    environment:
+      NODE_ENV: production
+      PORT: 5001
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: sky_grp
+      DB_USER: root
+      DB_PASSWORD: root
+      REDIS_URL: redis://redis:6379
+      secretkey: CheeseCakeForSkyGroup
+      saltRound: 8
+      CACHE_KEY_PREFIX: sky-grp
+      RUN_SEED: "true"
+      Email: ${Email:-}
+      Emailpassword: ${Emailpassword:-}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
