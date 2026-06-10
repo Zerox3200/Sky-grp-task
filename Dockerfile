@@ -24,11 +24,12 @@ COPY --from=builder /app/migrations ./migrations
 COPY --from=builder /app/DB ./DB
 COPY docker/docker-entrypoint.sh /docker-entrypoint.sh
 
-RUN chmod +x /docker-entrypoint.sh
+# Strip Windows CRLF so the script runs on Linux (avoids "no such file or directory")
+RUN sed -i 's/\r$//' /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh
 
 EXPOSE 5001
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
   CMD node -e "fetch('http://127.0.0.1:' + (process.env.PORT || 5001) + '/api-docs/').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/docker-entrypoint.sh"]
